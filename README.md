@@ -66,6 +66,43 @@ streamlit run app.py
 
 ---
 
+## System Architecture
+
+```
+┌─────────────────────────────┐
+│        Streamlit UI         │
+│   (User Query Interface)    │
+└──────────────┬──────────────┘
+               │ User Input
+               ▼
+┌─────────────────────────────┐
+│      Intent Router          │
+│ (Info Query / Action Mode)  │
+└───────┬───────────┬─────────┘
+        │           │
+        │           │
+        ▼           ▼
+┌──────────────┐   ┌────────────────┐
+│   RAG Mode   │   │  Action Mode   │
+│ (Doc Search │   │ (JSON Generator│
+│  + Citation)│   │  via LLM)       │
+└──────┬───────┘   └────────┬───────┘
+       │                    │
+       ▼                    ▼
+┌──────────────────┐   ┌──────────────────┐
+│  ChromaDB Vector │   │ HuggingFace LLM  │
+│  Store (Embeds)  │   │ (Mistral-Instruct│
+└──────┬───────────┘   └────────┬─────────┘
+       │ Retrieved Chunks        │ JSON Output
+       ▼                         ▼
+┌─────────────────────────────┐
+│ Citation-Grounded Answer OR │
+│ Deterministic Action JSON   │
+└─────────────────────────────┘
+```
+
+---
+
 ## How It Works
 
 1. User enters a query in the Streamlit interface
